@@ -1,9 +1,10 @@
 import { Typography } from "@mui/material";
 import React from "react";
 
+import Card2 from "./Card2";
 const Cards = () => {
   return (
-    <div className='flex flex-col  justify-start mt-[3rem] '>
+    <div className='flex flex-col  justify-start mt-[3rem] gap-[2rem]'>
       <section className='flex justify-around '>
         <div className='w-[510px] h-[330px] bg-[#D9D9D9] rounded-3xl flex flex-col items-center justify-center font-poppins'>
           <p className='text-[36px] font-bold leading-[54px] font-poppins '>
@@ -119,8 +120,7 @@ const Cards = () => {
           </div>
         </div>
       </section>
-
-      <section className='flex justify-between'></section>
+      <Card2 />
     </div>
   );
 };

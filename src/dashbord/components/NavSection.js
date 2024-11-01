@@ -1,8 +1,25 @@
 import { InputAdornment, TextField, Box } from "@mui/material";
 import Switch from "@mui/material/Switch";
+import { Controller, useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import ValidationSchema from "./ValidationSchema";
+import Tooltip from "@mui/material/Tooltip";
 
 const NavSection = () => {
   const label = { inputProps: { "aria-label": "Color switch demo" } };
+
+  const defaultValues = {
+    city: "",
+  };
+
+  const { control, register, formState, handleSubmit, reset } = useForm({
+    mode: "onChange",
+    defaultValues,
+    resolver: yupResolver(ValidationSchema),
+  });
+
+  const { isValid, dirtyFields, errors, setError } = formState;
 
   return (
     <>
@@ -20,7 +37,7 @@ const NavSection = () => {
             size='medium'
             variant='outlined'
             className='font-poppins rounded-full pl-2'
-            // value={filter.search}
+            type='city'
             placeholder='Search by Preferred City...'
             // onChange={(event) => {
             //   setFilter({ ...filter, search: event.target.value });
@@ -32,9 +49,15 @@ const NavSection = () => {
               },
             }}
             InputProps={{
-              startAdornment: (
-                <InputAdornment position='start' className='pl-0 '>
-                  <img src='assets/search 1.png' alt='serch-icon' width={25} />
+              endAdornment: (
+                <InputAdornment position='end' className='pl-0 cursor-pointer'>
+                  <Tooltip title='Search' placement='bottom' className=''>
+                    <img
+                      src='assets/search 1.png'
+                      alt='serch-icon'
+                      width={25}
+                    />
+                  </Tooltip>
                 </InputAdornment>
               ),
             }}

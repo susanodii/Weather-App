@@ -1,25 +1,23 @@
 import { InputAdornment, TextField, Box } from "@mui/material";
 import Switch from "@mui/material/Switch";
-import { Controller, useForm } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import ValidationSchema from "./ValidationSchema";
+
 import Tooltip from "@mui/material/Tooltip";
+import WeatherContext from "../../weatherContext/WeatherContex";
+import { useContext, useState } from "react";
 
 const NavSection = () => {
   const label = { inputProps: { "aria-label": "Color switch demo" } };
+  const [text, setText] = useState("");
 
-  const defaultValues = {
-    city: "",
+  const { fetchCity } = useContext(WeatherContext);
+
+  const handleChange = (e) => setText(e.target.value);
+  console.log(fetchCity);
+
+  const handleSubmit = (e) => {
+    fetchCity(text);
+    setText("");
   };
-
-  const { control, register, formState, handleSubmit, reset } = useForm({
-    mode: "onChange",
-    defaultValues,
-    resolver: yupResolver(ValidationSchema),
-  });
-
-  const { isValid, dirtyFields, errors, setError } = formState;
 
   return (
     <>
@@ -39,9 +37,7 @@ const NavSection = () => {
             className='font-poppins rounded-full pl-2'
             type='city'
             placeholder='Search by Preferred City...'
-            // onChange={(event) => {
-            //   setFilter({ ...filter, search: event.target.value });
-            // }}
+            onChange={handleChange}
             sx={{
               "& .MuiOutlinedInput-root": {
                 paddingLeft: 2,
@@ -50,7 +46,10 @@ const NavSection = () => {
             }}
             InputProps={{
               endAdornment: (
-                <InputAdornment position='end' className='pl-0 cursor-pointer'>
+                <InputAdornment
+                  position='end'
+                  className='pl-0 cursor-pointer  '
+                >
                   <Tooltip title='Search' placement='bottom' className=''>
                     <img
                       src='assets/search 1.png'

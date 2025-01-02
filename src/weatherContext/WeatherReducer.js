@@ -1,12 +1,6 @@
 const WeatherReducer = (state, action) => {
   switch (action.type) {
-    case "GET_CITIES":
-      return {
-        ...state,
-        cities: action.payload,
-        isLoading: false,
-      };
-    case "GET_CITY":
+    case "SET_CITY":
       return {
         ...state,
         city: action.payload,

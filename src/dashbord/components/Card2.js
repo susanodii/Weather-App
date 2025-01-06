@@ -1,43 +1,62 @@
 import { Typography } from "@mui/material";
 import React from "react";
 
-const Card2 = () => {
-  const dailyFocast = [
-    {
-      image: "assets/clouds 1.png",
+const Card2 = ({ dailyForcast }) => {
+  // const dailyFocast = [
+  //   {
+  //     image: "assets/clouds 1.png",
 
-      temp: "20°C",
-      day: "Friday, 1 September",
-    },
+  //     temp: "20°C",
+  //     day: "Friday, 1 September",
+  //   },
 
-    {
-      image: "assets/clouds 1.png",
+  //   {
+  //     image: "assets/clouds 1.png",
 
-      temp: "22°C",
-      day: "Saturday, 2 September",
-    },
+  //     temp: "22°C",
+  //     day: "Saturday, 2 September",
+  //   },
 
-    {
-      image: "assets/clouds 1.png",
+  //   {
+  //     image: "assets/clouds 1.png",
 
-      temp: "25°C",
-      day: "Sunday, 3 September",
-    },
+  //     temp: "25°C",
+  //     day: "Sunday, 3 September",
+  //   },
 
-    {
-      image: "assets/clouds 1.png",
+  //   {
+  //     image: "assets/clouds 1.png",
 
-      temp: "21°C",
-      day: "Monday, 4 September",
-    },
+  //     temp: "21°C",
+  //     day: "Monday, 4 September",
+  //   },
 
-    {
-      image: "assets/clouds 1.png",
+  //   {
+  //     image: "assets/clouds 1.png",
 
-      temp: "20°C",
-      day: "Tuesday, 5 September",
-    },
-  ];
+  //     temp: "20°C",
+  //     day: "Tuesday, 5 September",
+  //   },
+  // ];
+
+  const formatDailyForecast = () => {
+    return dailyForcast?.list?.slice(0, 5)?.map((forecast) => {
+      const date = new Date(forecast.dt * 1000);
+      const dayName = date.toLocaleDateString("en-US", {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+      });
+      return {
+        image: "assets/clouds 1.png",
+
+        temp: `${Math.round(forecast.main.temp)}°C`,
+        day: dayName,
+      };
+    });
+  };
+
+  const formattedDailyFocast = formatDailyForecast();
 
   const hourlyFocast = [
     {
@@ -84,20 +103,28 @@ const Card2 = () => {
   ];
 
   return (
-    <section className='flex justify-around'>
-      <div className='w-[414px] h-[366px] bg-[#D9D9D9] rounded-3xl font-poppins'>
-        <p className='text-[32px] font-extrabold leading-[48px] font-poppins mt-3 text-center'>
-          {" "}
-          5 Days Forecast:
+    <section className='flex flex-col gap-10 justify-around md:flex-row md:gap-0 '>
+      <div className='w-full max-w-[500px] h-auto bg-[#D9D9D9] rounded-3xl font-poppins p-4 sm:p-6 mx-auto max-w-4xl'>
+        <p className='text-lg sm:text-2xl lg:text-[32px] font-extrabold leading-tight lg:leading-[48px] mb-4 text-center'>
+          3 Hours Forecast:
         </p>
-        <div>
-          {dailyFocast.map((focast, index) => (
-            <div className='flex justify-around items-center' key={index}>
-              <img src={focast.image} width={60} />
-              <p className='text-[24px] font-extrabold leading-[36px] font-poppins'>
+        <div className='space-y-4'>
+          {formattedDailyFocast?.map((focast, index) => (
+            <div
+              className='flex flex-col sm:flex-row justify-start items-center gap-4 p-4 shadow-sm bg-white rounded-lg'
+              key={index}
+            >
+              <div>
+                <img
+                  src={focast.image}
+                  className='w-12 sm:w-16'
+                  alt='forecast-icon'
+                />
+              </div>
+              <p className='text-base sm:text-lg md:text-[26px] font-extrabold leading-tight'>
                 {focast.temp}
               </p>
-              <p className='text-[20px] font-extrabold leading-[30px] font-poppins'>
+              <p className='text-sm sm:text-base md:text-[20px] font-extrabold leading-tight'>
                 {focast.day}
               </p>
             </div>
@@ -107,13 +134,13 @@ const Card2 = () => {
 
       {/* second card */}
 
-      <div className='w-[870px] h-[366px] bg-[#D9D9D9] rounded-3xl font-poppins'>
+      <div className=' h-auto w-full max-w-[870px]   bg-[#D9D9D9] rounded-3xl font-poppins mx-auto flex flex-col justify-center'>
         <p className='text-[32px] font-extrabold leading-[48px] font-poppins mt-3 text-center'>
           {" "}
           Hourly Forecast:
         </p>
         <div>
-          <div className=' flex flex-row flex-wrap justify-around'>
+          <div className=' flex  flex-row flex-wrap justify-around'>
             {hourlyFocast.map((focast, index) => (
               <div className=' ' key={index}>
                 <div

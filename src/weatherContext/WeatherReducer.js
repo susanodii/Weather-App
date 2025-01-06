@@ -6,13 +6,13 @@ const WeatherReducer = (state, action) => {
         city: action.payload,
         isLoading: false,
       };
+    case "DAILY-FORCAST":
+      return {
+        ...state,
+        dailyForcast: action.payload,
+        isLoading: false,
+      };
 
-    // case 'GET_REPOS':
-    // return{
-    //   ...state,
-    //   repos:action.payload,
-    //   isLoading:false
-    // }
     case "SET_LOADING":
       return {
         ...state,

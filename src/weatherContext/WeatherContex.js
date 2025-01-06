@@ -47,11 +47,34 @@ export const WeatherProvider = ({ children }) => {
     }
   };
 
+  const fetchDailyForcast = async (city, units = "metric") => {
+    setIsLoading();
+
+    const params = new URLSearchParams({
+      q: city,
+      appid: process.env.REACT_APP_WEATHER_TOKEN,
+      units: units,
+    });
+
+    try {
+      const res = await openWeather.get(`/forecast?${params}`);
+      console.log(res.data);
+      const data = res.data;
+      dispatch({
+        type: "DAILY-FORCAST",
+        payload: data,
+      });
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+    }
+  };
+
   return (
     <WeatherContext.Provider
       value={{
         ...state,
         fetchCity,
+        fetchDailyForcast,
       }}
     >
       {children}

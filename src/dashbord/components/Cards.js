@@ -5,32 +5,44 @@ import WeatherContext from "../../weatherContext/WeatherContex";
 
 import Card2 from "./Card2";
 const Cards = () => {
-  const { city } = useContext(WeatherContext);
+  const { city, dailyForcast } = useContext(WeatherContext);
 
-  // const {
-  //   name,
-  //   // main: { temp, feels_like, humidity, pressure },
-  //   weather,
-  //   wind,
-  //   // sys: { sunrise, sunset },
-  // } = city;
   console.log(city);
+  console.log(dailyForcast, "my God will do it");
+
+  const formatTime = (timestamp, timezone) => {
+    const utcMilliseconds = timestamp * 1000;
+    const localMilliseconds = utcMilliseconds + timezone * 1000;
+    const date = new Date(localMilliseconds);
+
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
+
+  const formatDate = (timestamp) => {
+    const date = new Date((timestamp + city.timezone) * 1000);
+    return date.toLocaleDateString([], {
+      weekday: "long",
+      day: "numeric",
+      month: "short",
+    });
+  };
+
   return (
     <div className='flex flex-col  justify-start mt-[3rem] gap-[2rem] p-6'>
-      <section className='flex justify-around '>
-        <div className='w-[510px] h-[330px] bg-[#D9D9D9] rounded-3xl flex flex-col items-center justify-center font-poppins'>
+      <section className='flex flex-col gap-[3rem] justify-around md:flex-row md:gap-0 '>
+        <div className=' w-full max-w-[510px] h-auto bg-[#D9D9D9] rounded-3xl flex flex-col items-center justify-center font-poppins py-4'>
           <p className='text-[36px] font-bold leading-[54px] font-poppins '>
             {city.name}
           </p>
           <p className='text-[96px] font-bold leading-[144px] font-poppins '>
-            09:03
+            {formatTime(city?.dt || 0, city?.timezone || 0)}
           </p>
           <p className='text-[20px] font-bold leading-[30px] font-poppins '>
-            Thursday, 31 Aug
+            {formatDate(city?.dt || 0)}
           </p>
         </div>
 
-        <div className='w-[780px] h-[330px] bg-[#D9D9D9] rounded-3xl flex justify-between px-4 items-center  font-poppins'>
+        <div className='w-full max-w-[780px] h-auto py-4 bg-[#D9D9D9] rounded-3xl flex flex-col justify-between px-4 items-center  font-poppins md:flex-row'>
           <div className='flex flex-col justify-between'>
             <div className='text-[80px] font-extrabold leading-[120px] font-poppins'>
               {" "}
@@ -54,7 +66,7 @@ const Cards = () => {
                     Sunrise
                   </p>
                   <p className='text-[16px] font-semibold leading-[24px] font-poppins'>
-                    06:37 AM
+                    {formatTime(city?.sys?.sunrise || 0)}
                   </p>
                 </div>
               </div>
@@ -67,16 +79,21 @@ const Cards = () => {
                     Sunset
                   </p>
                   <p className='text-[16px] font-semibold leading-[24px] font-poppins'>
-                    20:37 AM
+                    {formatTime(city?.sys?.sunset || 0)}
                   </p>
                 </div>
               </div>
-              {/* <div></div> */}
             </div>
           </div>
           {/* second row in the card */}
           <div className=' flex flex-col justify-around items-center'>
-            <img src='assets/clear 1.png' alt='sun' />
+            {/* <img src='assets/clear 1.png' alt='sun' /> */}
+            {city.weather && city.weather[0]?.icon && (
+              <img
+                src={`https://openweathermap.org/img/wn/${city.weather[0].icon}@2x.png`}
+                alt={city.weather[0]?.description || "weather icon"}
+              />
+            )}
             <p className='text-[32px] font-extrabold leading-[48px] font-poppins'>
               {" "}
               {city.weather && city.weather[0]?.description}
@@ -127,12 +144,11 @@ const Cards = () => {
                   UV
                 </p>
               </div>
-              {/* <div></div> */}
             </div>
           </div>
         </div>
       </section>
-      <Card2 />
+      <Card2 dailyForcast={dailyForcast} />
     </div>
   );
 };

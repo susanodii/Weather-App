@@ -1,4 +1,4 @@
-import { InputAdornment, TextField, Box, Button } from "@mui/material";
+import { InputAdornment, TextField, Box, Button, Alert } from "@mui/material";
 import Switch from "@mui/material/Switch";
 
 import Tooltip from "@mui/material/Tooltip";
@@ -8,31 +8,26 @@ import { useContext, useState } from "react";
 
 const NavSection = () => {
   const label = { inputProps: { "aria-label": "Color switch demo" } };
+  const [alertMessage, setAlertMessage] = useState("");
   const [text, setText] = useState("");
 
-  const {
-    control,
-    formState,
-
-    watch,
-    reset,
-    register,
-    setValue,
-    getValues,
-  } = useForm({
-    mode: "onChange",
-  });
-
-  const { fetchCity } = useContext(WeatherContext);
+  const { fetchCity, fetchDailyForcast } = useContext(WeatherContext);
 
   const handleChange = (e) => setText(e.target.value);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("City name:", text);
+    if (!text.trim()) {
+      setAlertMessage("City name is required");
+      return;
+    }
 
     fetchCity(text);
+    fetchDailyForcast(text);
+
     setText("");
+    setAlertMessage("");
   };
 
   return (
@@ -55,6 +50,7 @@ const NavSection = () => {
               type='city'
               placeholder='Search by Preferred City...'
               onChange={handleChange}
+              value={text}
               sx={{
                 "& .MuiOutlinedInput-root": {
                   paddingLeft: 2,
@@ -82,6 +78,12 @@ const NavSection = () => {
             />
           </Box>
         </form>
+
+        {alertMessage && (
+          <Alert severity='error' sx={{ marginTop: "1rem" }}>
+            {alertMessage}
+          </Alert>
+        )}
 
         <div className='flex gap-2 py-[0.7rem] px-2 bg-[#4CBB17] font-poppins text-white font-normal leading-[27px] rounded-full'>
           <img

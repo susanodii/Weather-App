@@ -3,13 +3,15 @@ import Switch from "@mui/material/Switch";
 
 import Tooltip from "@mui/material/Tooltip";
 import WeatherContext from "../../weatherContext/WeatherContex";
-import { useForm } from "react-hook-form";
+import { ThemeContext } from "../../themeContext/ThemeContext";
+
 import { useContext, useState } from "react";
 
 const NavSection = () => {
   const label = { inputProps: { "aria-label": "Color switch demo" } };
   const [alertMessage, setAlertMessage] = useState("");
   const [text, setText] = useState("");
+  const { isDarkMode, toggleColorMode } = useContext(ThemeContext);
 
   const { fetchCity, fetchDailyForcast } = useContext(WeatherContext);
 
@@ -32,21 +34,39 @@ const NavSection = () => {
 
   return (
     <>
-      <div className='flex justify-around  overflow-hidden items-end mt-[3rem]'>
+      <div className='px-[2rem] flex flex-col sm:flex-row justify-around  sm:items-center  overflow-hidden mt-[3rem] '>
         <div className='flex flex-col'>
-          <Switch {...label} defaultChecked color='default' size='medium' />
-          <p className='font-poppins font-extrabold leading-[27px] '>
-            Light Mood
+          <Switch
+            {...label}
+            defaultChecked={isDarkMode}
+            color='default'
+            size='medium'
+            onClick={toggleColorMode}
+          />
+          <p
+            className={`font-poppins font-extrabold leading-[27px] ${
+              isDarkMode ? "text-white" : "text-black"
+            }
+           `}
+          >
+            {isDarkMode ? " Dark Mood " : "Light Mood"}
           </p>
         </div>
 
         <form onSubmit={handleSubmit}>
-          <Box sx={{ width: 700, maxWidth: "100%" }} className='rounded-full'>
+          <Box
+            sx={{ width: 700, maxWidth: "100%" }}
+            className={`rounded-full  ${
+              isDarkMode ? "text-white" : "text-black"
+            }`}
+          >
             <TextField
               fullWidth
               size='medium'
               variant='outlined'
-              className='font-poppins rounded-full pl-2'
+              className={`rounded-full pl-2 ${
+                isDarkMode ? "text-white" : "text-black"
+              }`}
               type='city'
               placeholder='Search by Preferred City...'
               onChange={handleChange}
@@ -55,6 +75,10 @@ const NavSection = () => {
                 "& .MuiOutlinedInput-root": {
                   paddingLeft: 2,
                   borderRadius: "25px",
+                },
+
+                "& .MuiInputBase-input": {
+                  color: isDarkMode ? "white" : "black",
                 },
               }}
               InputProps={{
@@ -85,7 +109,7 @@ const NavSection = () => {
           </Alert>
         )}
 
-        <div className='flex gap-2 py-[0.7rem] px-2 bg-[#4CBB17] font-poppins text-white font-normal leading-[27px] rounded-full'>
+        <div className='mt-[1rem] flex gap-2 py-[0.7rem] px-2 bg-[#4CBB17] font-poppins text-white font-normal leading-[27px] rounded-full '>
           <img
             src='assets/current-location-icon.png'
             alt='location-icon'

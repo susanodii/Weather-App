@@ -1,13 +1,16 @@
 import React from "react";
 import Dashboard from "./dashbord/Dashboard";
 import { WeatherProvider } from "./weatherContext/WeatherContex";
+import { ThemeProvider } from "./themeContext/ThemeContext";
 
 const App = () => {
   return (
     <>
-      <WeatherProvider>
-        <Dashboard />
-      </WeatherProvider>
+      <ThemeProvider>
+        <WeatherProvider>
+          <Dashboard />
+        </WeatherProvider>
+      </ThemeProvider>
     </>
   );
 };
